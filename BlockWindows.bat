@@ -1,114 +1,85 @@
-ECHO OFF
+@ECHO OFF
 SETLOCAL
 
-REM --- Check for administrative privleges
+:: Check for administrative permissions
+:: NOT TESTED ON WINDOWS 10.
 net session >nul 2>&1
-IF NOT %errorLevel% == 0 (
-	echo This script must be run as an administrator
+if not %errorLevel% == 0 (
+	echo This script must be run as an administrator.
 	pause
 	exit /B
 )
 
-REM --- uninstall updates
-echo uninstalling updates ...
-echo Delete KB971033 (license validation)
-start "title" /b /wait wusa.exe /kb:971033 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB2902907 (Microsoft Security Essentials)
-start "title" /b /wait wusa.exe /kb:2902907 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB2952664 (Get Windows 10 assistant)
-start "title" /b /wait wusa.exe /kb:2952664 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB2976978 (telemetry for Windows 8/8.1)
-start "title" /b /wait wusa.exe /kb:2976978 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB2990214 (Get Windows 10 for Win7)
-start "title" /b /wait wusa.exe /kb:2990214 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB3012973 (Upgrade to Windows 10 Pro)
-start "title" /b /wait wusa.exe /kb:3012973 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB3021917 (Update to Windows 7 SP1 for performance improvements)
-start "title" /b /wait wusa.exe /kb:3021917 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB3022345 (telemetry)
-start "title" /b /wait wusa.exe /kb:3022345 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB3035583 (GWX Update installs Get Windows 10 app in Windows 8.1 and Windows 7 SP1)
-start "title" /b /wait wusa.exe /kb:3035583 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB3044374 (Get Windows 10 for Win8.1)
-start "title" /b /wait wusa.exe /kb:3044374 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB3050265 (update for Windows Update on Win7)
-start "title" /b /wait wusa.exe /kb:3050265 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB3065987 (update for Windows Update on Win7/Server 2008R2)
-start "title" /b /wait wusa.exe /kb:3065987 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB3068708 (telemetry)
-start "title" /b /wait wusa.exe /kb:3068708 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB3075249 (telemetry for Win7/8.1)
-start "title" /b /wait wusa.exe /kb:3075249 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB3075853 (update for Windows Update on Win8.1/Server 2012R2)
-start "title" /b /wait wusa.exe /kb:3075853 /uninstall /quiet /norestart
-echo  - next
-echo Delete KB3080149 (Telemetry)
-start "title" /b /wait wusa.exe /kb:3080149 /uninstall /quiet /norestart
-echo  - done.
-timeout 5
+:: Harmful updates by type
+set updates_validation=971033
+set updates_getWindows10=2952664 2990214 3012973 3035583 3044374
+set updates_performance=3021917
+set updates_securityEssentials=2902907
+set updates_telemetry=2976978 3022345 3068708 3075249 3080149
+set updates_WindowsUpdate=3050265 3065987 3075853
 
-REM --- Hide updates
-echo Hiding updates...
-start "title" /b /wait cscript.exe "%~dp0HideWindowsUpdates.vbs" 971033 2902907 2952664 2976987 2990214 3012973 3021917 3022345 3035583 3044374 3050265 3065987 3068708 3075249 3075853 3080149 
-echo  - done.
+:: If you believe a category is non-harmful, remove it from the following:
+set updates=%updates_validation% %updates_securityEssentials%^
+ %updates_getWindows10% %updates_performance% %updates_telemetry%^
+ %updates_WindowsUpdate%
 
-REM --- Block Routes
-echo Blocking Routes...
-route -p add 23.218.212.69 MASK 255.255.255.255 0.0.0.0
-route -p add 65.55.108.23 MASK 255.255.255.255 0.0.0.0
-route -p add 65.39.117.230 MASK 255.255.255.255 0.0.0.0
-route -p add 134.170.30.202 MASK 255.255.255.255 0.0.0.0
-route -p add 137.116.81.24 MASK 255.255.255.255 0.0.0.0
-route -p add 204.79.197.200 MASK 255.255.255.255 0.0.0.0
+:: Uninstall Updates
+echo Uninstalling harmful updates...
+FOR %%U IN (%updates%) DO (
+	echo 	Uninstalling KB%%U...
+	wusa /kb:%%U /uninstall /quiet /norestart
+)
 echo - done
 
-REM --- Disable tasks
-echo Disabling tasks...
-schtasks /Change /TN "\Microsoft\Windows\Application Experience\AitAgent" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Application Experience\ProgramDataUpdater" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Autochk\Proxy" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Maintenance\WinSAT" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\ActivateWindowsSearch" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\ConfigureInternetTimeService" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\DispatchRecoveryTasks" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\ehDRMInit" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\InstallPlayReady" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\mcupdate" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\MediaCenterRecoveryTask" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\ObjectStoreRecoveryTask" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\OCURActivate" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\OCURDiscovery" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\PBDADiscovery" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\PBDADiscoveryW1" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\PBDADiscoveryW2" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\PvrRecoveryTask" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\PvrScheduleTask" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\RegisterSearch" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\ReindexSearchRoot" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\SqlLiteRecoveryTask" /DISABLE
-schtasks /Change /TN "\Microsoft\Windows\Media Center\UpdateRecordPath" /DISABLE
+:: Hide Updates
+echo Hiding harmful updates...
+cscript /NoLogo "%~dp0HideWindowsUpdates.vbs" %updates%
 echo - done
 
-REM --- Kill services
+:: Block Routes
+set routes=23.218.212.69 65.55.108.23 65.39.117.230 134.170.30.202^
+ 137.116.81.24 204.79.197.200
+echo Blocking harmful routes...
+FOR %%R IN (%routes%) DO (
+	route -p add %%R MASK 255.255.255.255 0.0.0.0
+)
+echo - done
+
+::Disable Tasks
+echo Disabling harmful tasks...
+set tasks="\Microsoft\Windows\Application Experience\AitAgent"^
+ "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"^
+ "\Microsoft\Windows\Application Experience\ProgramDataUpdater"^
+ "\Microsoft\Windows\Autochk\Proxy"^
+ "\Microsoft\Windows\Customer Experience Improvement Program\Consolidator"^
+ "\Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask"^
+ "\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip"^
+ "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector"^
+ "\Microsoft\Windows\Maintenance\WinSAT"^
+ "\Microsoft\Windows\Media Center\ActivateWindowsSearch"^
+ "\Microsoft\Windows\Media Center\ConfigureInternetTimeService"^
+ "\Microsoft\Windows\Media Center\DispatchRecoveryTasks"^
+ "\Microsoft\Windows\Media Center\ehDRMInit"^
+ "\Microsoft\Windows\Media Center\InstallPlayReady"^
+ "\Microsoft\Windows\Media Center\mcupdate"^
+ "\Microsoft\Windows\Media Center\MediaCenterRecoveryTask"^
+ "\Microsoft\Windows\Media Center\ObjectStoreRecoveryTask"^
+ "\Microsoft\Windows\Media Center\OCURActivate"^
+ "\Microsoft\Windows\Media Center\OCURDiscovery"^
+ "\Microsoft\Windows\Media Center\PBDADiscovery"^
+ "\Microsoft\Windows\Media Center\PBDADiscoveryW1"^
+ "\Microsoft\Windows\Media Center\PBDADiscoveryW2"^
+ "\Microsoft\Windows\Media Center\PvrRecoveryTask"^
+ "\Microsoft\Windows\Media Center\PvrScheduleTask"^
+ "\Microsoft\Windows\Media Center\RegisterSearch"^
+ "\Microsoft\Windows\Media Center\ReindexSearchRoot"^
+ "\Microsoft\Windows\Media Center\SqlLiteRecoveryTask"^
+ "\Microsoft\Windows\Media Center\UpdateRecordPath"
+FOR %%T in (%tasks%) DO (
+	schtasks /Change /TN %%T /DISABLE
+)
+echo - done
+
 echo Killing Diagtrack-service (if it still exists)...
 sc stop Diagtrack
 sc delete Diagtrack
