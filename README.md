@@ -51,3 +51,4 @@ MD5 f91c7c77b31aca784332fafd80d11664
 http://www.hakspek.com/security/windows-script-to-remove-all-windows-10-telemetry-update
 
 MD5 a404bc85db63d5340aa3b67ea523ff4e
+
