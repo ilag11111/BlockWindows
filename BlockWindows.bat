@@ -14,8 +14,8 @@ echo  - next
 echo Delete KB2952664 (Get Windows 10 assistant)
 start "title" /b /wait wusa.exe /kb:2952664 /uninstall /quiet /norestart
 echo  - next
-echo Delete KB2976987 (description not available)
-start "title" /b /wait wusa.exe /kb:2976987 /uninstall /quiet /norestart
+echo Delete KB2976978 (telemetry for Windows 8/8.1)
+start "title" /b /wait wusa.exe /kb:2976978 /uninstall /quiet /norestart
 echo  - next
 echo Delete KB2990214 (Get Windows 10 for Win7)
 start "title" /b /wait wusa.exe /kb:2990214 /uninstall /quiet /norestart
@@ -68,7 +68,6 @@ route -p add 65.39.117.230 MASK 255.255.255.255 0.0.0.0
 route -p add 134.170.30.202 MASK 255.255.255.255 0.0.0.0
 route -p add 137.116.81.24 MASK 255.255.255.255 0.0.0.0
 route -p add 204.79.197.200 MASK 255.255.255.255 0.0.0.0
-route -p add 23.218.212.69 MASK 255.255.255.255 0.0.0.0
 echo - done
 
 REM --- Disable tasks
@@ -104,15 +103,15 @@ schtasks /Change /TN "\Microsoft\Windows\Media Center\UpdateRecordPath" /DISABLE
 echo - done
 
 REM --- Kill services
-echo Killing Diagtrack-service (if it still exists)…
+echo Killing Diagtrack-service (if it still exists)...
 sc stop Diagtrack
 sc delete Diagtrack
 echo - done
 
-echo Stop remoteregistry-service (if it still exists)…
+echo Stop remoteregistry-service (if it still exists)...
 sc config remoteregistry start= disabled
 sc stop remoteregistry
 
-echo Done — Manually Reboot for changes to take effect
+echo Done - Manually Reboot for changes to take effect
 REM shutdown -r
 pause
