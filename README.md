@@ -38,9 +38,9 @@ PS There is a highly concerted effort by Microsoft Employees to harass websites 
 --
 Please repost these URLs many places on social media, blogs, etc. I'm in it for the long haul.
 --
-https://blockwindows.wordpress.com/
-
 https://github.com/WindowsLies/BlockWindows/
+
+https://blockwindows.wordpress.com/
 
 File Mirrors
 --
@@ -51,4 +51,3 @@ MD5 f91c7c77b31aca784332fafd80d11664
 http://www.hakspek.com/security/windows-script-to-remove-all-windows-10-telemetry-update
 
 MD5 a404bc85db63d5340aa3b67ea523ff4e
-
