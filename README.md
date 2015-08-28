@@ -1,3 +1,15 @@
+# BlockWindows - iLag's edition.
+A personal modification of BlockWindows with a number of minute changes.  The original readme, minus the soon-to-be-outdated mirror links, is below.  Read through that for more information.
+
+Changes: (Assuming they haven't already been implemented)
+- Typo fixes.
+- A not-fully-tested method of checking for admin.
+- hosts.bat looks in the current directory for hosts instead of My Downloads
+
+Expecting more?  Check out the rewrite branch.
+
+---
+
 # BlockWindows
 Stop Windows 7 through 10 Nagging and Spying updates, Tasks, IPs, and services. Works with Windows 7 through 10
 
@@ -41,13 +53,3 @@ Please repost these URLs many places on social media, blogs, etc. I'm in it for 
 https://blockwindows.wordpress.com/
 
 https://github.com/WindowsLies/BlockWindows/
-
-File Mirrors
---
-http://mir.cr/4UOQEENP
-
-MD5 f91c7c77b31aca784332fafd80d11664
-
-http://www.hakspek.com/security/windows-script-to-remove-all-windows-10-telemetry-update
-
-MD5 a404bc85db63d5340aa3b67ea523ff4e
