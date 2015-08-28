@@ -6,7 +6,9 @@ Changes: (Assuming they haven't already been implemented)
 - A not-fully-tested method of checking for admin.
 - hosts.bat looks in the current directory for hosts instead of My Downloads
 
-Expecting more?  Check out the rewrite branch.
+Rewrite-specific changes:
+- A completely-rewritten BlockWindows.bat (FOR the heck of it)
+- All line endings coverted to Windows-style (CRLF)
 
 ---
 
